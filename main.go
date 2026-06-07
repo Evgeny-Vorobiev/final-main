@@ -96,6 +96,19 @@ func (s ParcelService) Delete(number int) error {
 	return s.store.Delete(number)
 }
 
+func ensureSchema(db *sql.DB) error {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS parcel (
+			number INTEGER PRIMARY KEY AUTOINCREMENT,
+			client INTEGER NOT NULL,
+			status TEXT NOT NULL,
+			address TEXT NOT NULL,
+			created_at TEXT NOT NULL
+		)
+	`)
+	return err
+}
+
 func main() {
 	db, err := sql.Open("sqlite", "tracker.db")
 	if err != nil {
@@ -103,6 +116,11 @@ func main() {
 		return
 	}
 	defer db.Close()
+
+	if err := ensureSchema(db); err != nil {
+		fmt.Println("schema error:", err)
+		return
+	}
 
 	store := NewParcelStore(db)
 	service := NewParcelService(store)
