@@ -7,15 +7,14 @@ RUN go mod download
 
 COPY . .
 
-ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV GOARCH=amd64
 
 RUN go build -o parcel-tracker main.go
 
-FROM alpine:latest
+FROM debian:bookworm-slim
 
-RUN apk --no-cache add ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/
 
