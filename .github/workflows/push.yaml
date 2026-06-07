@@ -15,7 +15,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.25'
 
       - name: Install dependencies
         run: go mod tidy
@@ -45,7 +45,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.5.1
         with:
-          images: <DOCKER_ID>/parcel-tracker
+          images: evguenyv/final-main
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
